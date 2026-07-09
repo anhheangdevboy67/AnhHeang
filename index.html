@@ -72,7 +72,7 @@
             margin-bottom: 15px;
         }
 
-        /* ================= NEW VIEWS BOX STYLE ================= */
+        /* ================= GLOBAL VIEWS BOX STYLE ================= */
         .views-box {
             display: inline-flex;
             align-items: center;
@@ -353,7 +353,7 @@
             
             <div class="views-box">
                 <i class="fa-solid fa-eye"></i>
-                <span id="view-count">0</span> views
+                <span id="view-count">...</span> views
             </div>
         </div>
 
@@ -454,19 +454,25 @@
         const progressFill = document.getElementById('progress-fill');
         const progressWrapper = document.getElementById('progress-wrapper');
 
-        // ================= VIEW COUNTER JAVASCRIPT =================
-        function initViewCounter() {
-            let currentViews = localStorage.getItem('profile_views');
-            if (currentViews) {
-                currentViews = parseInt(currentViews) + 1;
-            } else {
-                currentViews = 1;
-            }
-            localStorage.setItem('profile_views', currentViews);
-            document.getElementById('view-count').textContent = currentViews;
+        // ================= GLOBAL LIVE VIEW COUNTER JAVASCRIPT =================
+        function fetchGlobalViews() {
+            // Using unique id key 'anhheang_social_views' to prevent mixing with other sites
+            fetch("https://api.counterapi.dev/v1/anhheang_social_views/global/up")
+                .then(response => response.json())
+                .then(data => {
+                    if(data && data.count) {
+                        document.getElementById('view-count').textContent = data.count;
+                    } else {
+                        document.getElementById('view-count').textContent = "1";
+                    }
+                })
+                .catch(error => {
+                    console.log("Counter error: ", error);
+                    document.getElementById('view-count').textContent = "1";
+                });
         }
-        initViewCounter();
-        // ==========================================================
+        fetchGlobalViews();
+        // =======================================================================
 
         function loadTrack(index) {
             const track = playlist[index];
