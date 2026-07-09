@@ -69,7 +69,29 @@
             font-weight: 400;
             text-transform: uppercase;
             letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        /* ================= NEW VIEWS BOX STYLE ================= */
+        .views-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(33, 178, 255, 0.08);
+            border: 1px solid rgba(33, 178, 255, 0.3);
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            color: #21B2FF;
+            letter-spacing: 1px;
             margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(33, 178, 255, 0.1);
+            text-transform: uppercase;
+        }
+        
+        .views-box i {
+            animation: pulseGlow 2s infinite;
         }
 
         /* Glowing Theme-Matched Avatar Frame */
@@ -328,6 +350,11 @@
             </div>
             <h1>AnhHeang Social</h1>
             <p>blehh blehh</p>
+            
+            <div class="views-box">
+                <i class="fa-solid fa-eye"></i>
+                <span id="view-count">0</span> views
+            </div>
         </div>
 
         <div class="music-player">
@@ -427,6 +454,20 @@
         const progressFill = document.getElementById('progress-fill');
         const progressWrapper = document.getElementById('progress-wrapper');
 
+        // ================= VIEW COUNTER JAVASCRIPT =================
+        function initViewCounter() {
+            let currentViews = localStorage.getItem('profile_views');
+            if (currentViews) {
+                currentViews = parseInt(currentViews) + 1;
+            } else {
+                currentViews = 1;
+            }
+            localStorage.setItem('profile_views', currentViews);
+            document.getElementById('view-count').textContent = currentViews;
+        }
+        initViewCounter();
+        // ==========================================================
+
         function loadTrack(index) {
             const track = playlist[index];
             audio.src = track.src;
@@ -451,13 +492,11 @@
         playBtn.addEventListener('click', togglePlay);
 
         // ================= AUTOMATIC PLAYLOGIC FOR VISITORS =================
-        // Attempts to safely trigger autoplay if permitted, otherwise registers a listener
         function attemptAutoplay() {
             audio.play().then(() => {
                 playIcon.className = "fa-solid fa-pause";
                 removeAutoplayListeners();
             }).catch(() => {
-                // Autoplay blocked by browser. Wait for user gesture on document object.
                 document.addEventListener('click', forcePlayOnGesture);
                 document.addEventListener('touchstart', forcePlayOnGesture);
             });
@@ -475,7 +514,6 @@
             document.removeEventListener('touchstart', forcePlayOnGesture);
         }
 
-        // Initialize attempt after element bindings finish
         window.addEventListener('DOMContentLoaded', attemptAutoplay);
         // ====================================================================
 
