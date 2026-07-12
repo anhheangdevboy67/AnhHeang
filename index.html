@@ -287,6 +287,7 @@
             text-transform: uppercase;
             color: #64748b;
             letter-spacing: 1px;
+            margin-bottom: 20px; /* matched from source text */
             margin-bottom: 2px;
             transition: color 0.3s ease;
         }
@@ -310,6 +311,10 @@
         .social-link:hover .app-name { color: #ffffff; text-shadow: 0 0 10px rgba(255, 255, 255, 0.2); }
 
         /* Brand Colors mapping */
+        .website:hover, .website:active { border-color: #21B2FF; box-shadow: 0 8px 20px rgba(33, 178, 255, 0.4); }
+        .website:hover i { color: #21B2FF; text-shadow: 0 0 10px rgba(33, 178, 255, 0.6); }
+        .website:hover .app-name { text-shadow: 0 0 10px rgba(33, 178, 255, 0.6); }
+
         .facebook:hover, .facebook:active { border-color: #1877F2; box-shadow: 0 8px 20px rgba(24, 119, 242, 0.3); }
         .facebook:hover i { color: #1877F2; }
         .facebook:hover .app-name { text-shadow: 0 0 10px rgba(24, 119, 242, 0.6); }
@@ -382,6 +387,15 @@
         </div>
 
         <div class="links-container">
+            <!-- NEW WEBSITE LINK -->
+            <a href="https://anhheang67-9999.vercel.app/" target="_blank" class="social-link website">
+                <i class="fa-solid fa-globe"></i>
+                <div class="text-group">
+                    <span class="username">@anhheang</span>
+                    <span class="app-name">Website</span>
+                </div>
+            </a>
+
             <a href="https://web.facebook.com/AnhHeang.zzz/" target="_blank" class="social-link facebook">
                 <i class="fa-brands fa-facebook-f"></i>
                 <div class="text-group">
@@ -457,7 +471,6 @@
 
         // ================= UNLIMITED & CRASH-PROOF LIVE VIEW COUNTER =================
         function fetchGlobalViews() {
-            // Using a free, high-performance API mirror that permits unlimited calls
             fetch("https://countapi.mileshilliard.com/api/v1/hit/anhheang_social_pageviews")
                 .then(response => {
                     if (!response.ok) throw new Error("API lag");
@@ -473,16 +486,13 @@
                 })
                 .catch(error => {
                     console.log("Handled network delay smoothly:", error);
-                    // Safe Fail-over: If server is overloaded, show local storage or smooth fake number 
-                    // so users NEVER see "Error" or "..." text on screen.
                     const savedViews = localStorage.getItem('cached_views');
                     if (savedViews) {
-                        // Increment local count so it still feels live if network is offline
                         const tempCount = parseInt(savedViews) + 1;
                         document.getElementById('view-count').textContent = tempCount;
                         localStorage.setItem('cached_views', tempCount);
                     } else {
-                        document.getElementById('view-count').textContent = "184"; // Cool starting point
+                        document.getElementById('view-count').textContent = "184";
                     }
                 });
         }
